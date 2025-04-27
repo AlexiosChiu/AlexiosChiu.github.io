@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   
   
-  <title>AlexiosChiu&#39;s Blog</title>
+  <title>标签: Minecraft | AlexiosChiu&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta property="og:type" content="website">
 <meta property="og:title" content="AlexiosChiu&#39;s Blog">
-<meta property="og:url" content="https://alexioschiu.github.io/index.html">
+<meta property="og:url" content="https://alexioschiu.github.io/tags/Minecraft/index.html">
 <meta property="og:site_name" content="AlexiosChiu&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Alexios Chiu">
@@ -71,73 +71,36 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Minecraft-forge-开发环境配置" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2025/04/27/Minecraft-forge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="article-date">
-  <time class="dt-published" datetime="2025-04-27T13:06:00.000Z" itemprop="datePublished">2025-04-27</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2025" class="archive-year">2025</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2025/04/27/Minecraft-forge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="archive-article-date">
+  <time class="dt-published" datetime="2025-04-27T13:06:00.000Z" itemprop="datePublished">4月 27</time>
 </a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+      
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2025/04/27/Minecraft-forge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">Minecraft NeoForge 开发环境配置</a>
+      <a class="archive-article-title" href="/2025/04/27/Minecraft-forge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">Minecraft NeoForge 开发环境配置</a>
     </h1>
   
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <pre><code>本文采用环境：NeoForge 21.5.42-beta，支持Minecraft 1.20.5
-</code></pre>
-<h2 id="0-准备工作"><a href="#0-准备工作" class="headerlink" title="0. 准备工作"></a>0. 准备工作</h2><ul>
-<li>JDK21 (Minecraft 1.20及以上版本使用)</li>
-<li>IntelliJ IDEA</li>
-<li>NeoForge MDK</li>
-</ul>
-<h2 id="1-导入项目"><a href="#1-导入项目" class="headerlink" title="1. 导入项目"></a>1. 导入项目</h2><ul>
-<li>从NeoForge官网下载定制MDK模板后，用IDEA打开，将自动导入Gradle项目（如果没有，尝试运行<code>gradlew</code>。此时将下载Gradle并反编译Minecraft，国内网络环境需要科学上网</li>
-<li>提前在<code>文件-项目结构</code>中将<code>项目SDK</code>修改为<code>21</code>，<code>文件-设置-构建、执行、部署-Gradle</code>中将<code>Gradle JVM</code>修改为<code>项目SDK</code></li>
-</ul>
-<h2 id="2-修改gradle-properties"><a href="#2-修改gradle-properties" class="headerlink" title="2. 修改gradle.properties"></a>2. 修改gradle.properties</h2><ul>
-<li>修改<code>mod_id</code>、<code>mod_name</code>等基本信息，注意修改<code>mod_group_name</code>后Mod主类要放在相应目录</li>
-<li>NeoForge已默认使用Parchment映射，只需手动更新<code>parchment_minecraft_version</code>和<code>parchment_mapping_version</code>即可，版本号可在<a target="_blank" rel="noopener" href="https://parchmentmc.org/docs/getting-started">Parchment文档</a>查询</li>
-<li>修改完成后，点击右上角刷新Gradle设置</li>
-</ul>
-<h2 id="3-修改Mod主类"><a href="#3-修改Mod主类" class="headerlink" title="3. 修改Mod主类"></a>3. 修改Mod主类</h2><ul>
-<li>修改Mod主类名称，移动到<code>mod_group_name</code>对应的目录中</li>
-<li>个人习惯：将字段MODID更名为MOD_ID</li>
-<li>修改MOD_ID，注意只能使用小写英文字母和下划线，作为mod的唯一标识命名空间<ul>
-<li>IDEA重命名快捷键：<code>Shift + F6</code></li>
-</ul>
-</li>
-<li>删除多余的示例代码，可只留下<code>MOD_ID</code>和空的构造函数</li>
-</ul>
-<h2 id="4-尝试运行"><a href="#4-尝试运行" class="headerlink" title="4. 尝试运行"></a>4. 尝试运行</h2><ul>
-<li>运行Gradle任务<code>Client</code>或<code>runClient</code>，查看是否正常</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://alexioschiu.github.io/2025/04/27/Minecraft-forge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" data-id="cm9zon8380000dcu4driw4cs9" data-title="Minecraft NeoForge 开发环境配置" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
 </article>
-
-
-
+  
+  
+    </div></section>
   
 
 
