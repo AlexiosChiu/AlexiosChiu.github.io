@@ -14,7 +14,7 @@
 <meta property="og:description" content="1. 注册物品使用NeoForge 21.5.42-beta，支持Minecraft 1.21.5 参考：NeoForge文档::Items 本文暂不考虑方块对应物品所需的特殊设置 1.1 创建注册类首先创建一个新的类： 123456789public class OAItems &#123;    public static final DeferredRegister.Items ITEMS">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-27T13:57:13.000Z">
-<meta property="article:modified_time" content="2025-04-27T16:55:13.102Z">
+<meta property="article:modified_time" content="2025-04-27T17:04:38.071Z">
 <meta property="article:author" content="Alexios Chiu">
 <meta property="article:tag" content="Minecraft">
 <meta name="twitter:card" content="summary">
@@ -112,37 +112,27 @@
 <li>当需要为物品添加性质（堆叠数量、是否抗火等）则在<code>Item.Properties()</code>后链式添加</li>
 <li>需要定义在继承的Item子类中重写逻辑的物品时，使用写法1的<code>new 子类名</code>或写法2的<code>子类名::new</code></li>
 </ul>
-<h3 id="1-3-与物品匹配的资源文件"><a href="#1-3-与物品匹配的资源文件" class="headerlink" title="1.3 与物品匹配的资源文件"></a>1.3 与物品匹配的资源文件</h3><ul>
-<li>resources<ul>
-<li>assets<ul>
-<li><mod_id>
-- lang
-  - en_us.json
-  - zh_cn.json
-- items
-  - <item_id>.json
-- models
-  - item
-    - <item_id>.json
-- textures
-  - item
-    - <item_id>.png</li>
+<h3 id="1-3-与物品匹配的资源文件"><a href="#1-3-与物品匹配的资源文件" class="headerlink" title="1.3 与物品匹配的资源文件"></a>1.3 与物品匹配的资源文件</h3><h3 id="1-3-1-文件目录结构"><a href="#1-3-1-文件目录结构" class="headerlink" title="1.3.1 文件目录结构"></a>1.3.1 文件目录结构</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">resources/</span><br><span class="line">└── assets/</span><br><span class="line">  └── &lt;mod_id&gt;/</span><br><span class="line">    ├── lang/</span><br><span class="line">    │   ├── en_us.json</span><br><span class="line">    │   └── zh_cn.json</span><br><span class="line">    ├── models/</span><br><span class="line">    │   └── item/</span><br><span class="line">    │       └── &lt;item_id&gt;.json</span><br><span class="line">    ├── textures/</span><br><span class="line">    │   └── item/</span><br><span class="line">    │       └── &lt;item_id&gt;.png</span><br><span class="line">    └── items/</span><br><span class="line">      └── &lt;item_id&gt;.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;mod_id&gt;</code>：你的模组ID，例如<code>oceanic_arcana</code></li>
+<li><code>&lt;item_id&gt;</code>：物品的注册名，例如<code>test_item</code></li>
+<li><code>lang/</code>：语言文件目录，用于定义物品的显示名称</li>
+<li><code>models/item/</code>：物品模型文件目录，用于定义物品的外观模型</li>
+<li><code>textures/item/</code>：物品材质文件目录，用于存放物品的图片资源</li>
+<li><code>items/</code>：物品模型映射文件目录，用于定义物品的动态模型映射</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-3-1-语言文件lang"><a href="#1-3-1-语言文件lang" class="headerlink" title="1.3.1 语言文件lang"></a>1.3.1 语言文件lang</h3><p>在<code>lang</code>下的json文件中以键值对的形式定义翻译键，即为注册名定义显示名：</p>
+<h3 id="1-3-2-语言文件lang"><a href="#1-3-2-语言文件lang" class="headerlink" title="1.3.2 语言文件lang"></a>1.3.2 语言文件lang</h3><p>在<code>lang</code>下的json文件中以键值对的形式定义翻译键，即为注册名定义显示名：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;item.oceanic_arcana.test_item&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Test Item&quot;</span> </span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="1-3-2-模型文件models与物品模型映射"><a href="#1-3-2-模型文件models与物品模型映射" class="headerlink" title="1.3.2 模型文件models与物品模型映射"></a>1.3.2 模型文件models与物品模型映射</h3><p>在<code>models/item</code>下需要有与物品同名的json文件定义物品模型样式，以下是MC中最常见的物品模型定义方式：</p>
+<h3 id="1-3-3-模型文件models与物品模型映射"><a href="#1-3-3-模型文件models与物品模型映射" class="headerlink" title="1.3.3 模型文件models与物品模型映射"></a>1.3.3 模型文件models与物品模型映射</h3><p>在<code>models/item</code>下需要有与物品同名的json文件定义物品模型样式，以下是MC中最常见的物品模型定义方式：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;parent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;minecraft:item/generated&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;textures&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;layer0&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oceanic_arcana:item/test_item&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <p>在<code>items</code>下需要有与物品同名的json文件定义物品模型映射，这是从1.21.4-24w45a快照开始加入的功能，可以实现根据物品堆叠数等条件选择渲染不同的物品模型。如果不添加物品模型映射，则只能显示无效模型</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;minecraft:model&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oceanic_arcana:item/test_item&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <p>显然，每次新增物品时，如果不采用特殊模型，只需要复制已有的模型json文件，修改为新物品的名称即可</p>
-<h3 id="1-3-3-材质文件textures"><a href="#1-3-3-材质文件textures" class="headerlink" title="1.3.3 材质文件textures"></a>1.3.3 材质文件textures</h3><p>在<code>textures/item</code>下放置与物品同名的<code>png</code>图片，要求大小为$2^n * 2^n$，常用16*16。若长或宽并不满足，渲染时将向上扩展至某个2的n次幂，向左上对齐</p>
+<h3 id="1-3-4-材质文件textures"><a href="#1-3-4-材质文件textures" class="headerlink" title="1.3.4 材质文件textures"></a>1.3.4 材质文件textures</h3><p>在<code>textures/item</code>下放置与物品同名的<code>png</code>图片，要求大小为$2^n * 2^n$，常用16*16。若长或宽并不满足，渲染时将向上扩展至某个2的n次幂，向左上对齐</p>
 <h2 id="2-注册创造模式物品栏"><a href="#2-注册创造模式物品栏" class="headerlink" title="2. 注册创造模式物品栏"></a>2. 注册创造模式物品栏</h2><p>与注册物品的步骤类似，不赘述，例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OACreativeModeTabs</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredRegister&lt;CreativeModeTab&gt; OA_TABS =</span><br><span class="line">            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, OceanicArcana.MOD_ID);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Supplier&lt;CreativeModeTab&gt; OA_ITEMS_TAB = OA_TABS.register(<span class="string">&quot;items_tab&quot;</span>, () -&gt; CreativeModeTab.builder()</span><br><span class="line">            .title(Component.translatable(<span class="string">&quot;itemGroup.oceanic_arcana.items_tab&quot;</span>)) <span class="comment">// 需要在lang文件中定义</span></span><br><span class="line">            .icon(() -&gt; <span class="keyword">new</span> <span class="title class_">ItemStack</span>(OAItems.TEST_ITEM.get()))</span><br><span class="line">            .displayItems((params, output) -&gt; &#123;</span><br><span class="line">                output.accept(OAItems.TEST_ITEM.get());</span><br><span class="line">                <span class="comment">// 在这里添加更多物品</span></span><br><span class="line">            &#125;)</span><br><span class="line">            .build()); <span class="comment">// 结束</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Mod主类中要调用以下的register方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(IEventBus eventBus)</span> &#123;</span><br><span class="line">        OA_TABS.register(eventBus);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
