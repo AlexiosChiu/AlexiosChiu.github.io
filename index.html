@@ -71,6 +71,73 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Minecraft-NeoForge-注册方块" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/" class="article-date">
+  <time class="dt-published" datetime="2025-04-28T15:37:10.000Z" itemprop="datePublished">2025-04-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/">Minecraft NeoForge 注册方块</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="注册方块"><a href="#注册方块" class="headerlink" title="注册方块"></a>注册方块</h2><p>使用NeoForge 21.5.42-beta，支持Minecraft 1.21.5</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://docs.neoforged.net/docs/blocks/">NeoForge文档::Blocks</a></p>
+<h3 id="1-创建注册类并定义方块和方块物品"><a href="#1-创建注册类并定义方块和方块物品" class="headerlink" title="1. 创建注册类并定义方块和方块物品"></a>1. 创建注册类并定义方块和方块物品</h3><p>与物品注册类类似，但由于注册方块的同时还需要注册方块物品，此处定义了<code>registerBlock</code>与<code>registerBlockItem</code>方法一次完成两个注册</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OABlocks</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredRegister.<span class="type">Blocks</span> <span class="variable">BLOCKS</span> <span class="operator">=</span> DeferredRegister.createBlocks(OceanicArcana.MOD_ID);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此处定义DeferredBlock</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredBlock&lt;Block&gt; TEST_BLOCK = registerBlock(<span class="string">&quot;test_block&quot;</span>,</span><br><span class="line">            () -&gt; <span class="keyword">new</span> <span class="title class_">Block</span>(BlockBehaviour.Properties.of()</span><br><span class="line">                    .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(OceanicArcana.MOD_ID, <span class="string">&quot;test_block&quot;</span>)))</span><br><span class="line">                    <span class="comment">// setId自1.21.3开始需要添加</span></span><br><span class="line">                    <span class="comment">// 在此链式添加方块性质</span></span><br><span class="line">            ));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Block</span>&gt; DeferredBlock&lt;T&gt; <span class="title function_">registerBlock</span><span class="params">(String name, Supplier&lt;T&gt; block)</span> &#123;</span><br><span class="line">        DeferredBlock&lt;T&gt; toReturn = BLOCKS.register(name, block);</span><br><span class="line">        registerBlockItem(name, toReturn);</span><br><span class="line">        <span class="keyword">return</span> toReturn;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Block</span>&gt; <span class="keyword">void</span> <span class="title function_">registerBlockItem</span><span class="params">(String name, DeferredBlock&lt;T&gt; block)</span> &#123;</span><br><span class="line">        OAItems.ITEMS.register(name, () -&gt; <span class="keyword">new</span> <span class="title class_">BlockItem</span>(block.get(), <span class="keyword">new</span> <span class="title class_">Item</span>.Properties()</span><br><span class="line">                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(OceanicArcana.MOD_ID, name)))</span><br><span class="line">                .useBlockDescriptionPrefix() <span class="comment">// 重要！使得方块物品使用方块的lang翻译key</span></span><br><span class="line">        ));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(IEventBus eventBus)</span> &#123;</span><br><span class="line">        BLOCKS.register(eventBus);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上文使用的注册方法是<code>BLOCKS.register</code>，当然，NeoForge也提供了两种捷径<code>BLOCKS.registerBlock</code>与<code>BLOCKS.registerSimpleBlock</code>，如果需要使用的话，同时也需修改自己定义的两个注册方法。这两个方法不需要用户显式调用<code>setId</code>，而是在内部自动调用，毕竟这个机制更新真的莫名其妙</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredBlock&lt;Block&gt; TEST_BLOCK = BLOCKS.registerBlock(</span><br><span class="line">    <span class="string">&quot;test_block&quot;</span>, </span><br><span class="line">    Block::<span class="keyword">new</span>, </span><br><span class="line">    BlockBehaviour.Properties.of()</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果只是使用Block::new的话：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredBlock&lt;Block&gt; TEST_BLOCK = BLOCKS.registerSimpleBlock(</span><br><span class="line">    <span class="string">&quot;test_block&quot;</span>, </span><br><span class="line">    BlockBehaviour.Properties.of()</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F; TODO： 使用捷径后两个自定义注册方法的修改</p>
+<p>最后，在Mod主类调用<code>register</code>方法，传入<code>modEventBus</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OABlocks.register(modEventBus);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-与方块匹配的资源文件"><a href="#2-与方块匹配的资源文件" class="headerlink" title="2. 与方块匹配的资源文件"></a>2. 与方块匹配的资源文件</h3><h3 id="2-1-文件目录结构"><a href="#2-1-文件目录结构" class="headerlink" title="2.1 文件目录结构"></a>2.1 文件目录结构</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">resources/</span><br><span class="line">└── assets/</span><br><span class="line">  └── &lt;mod_id&gt;/</span><br><span class="line">    ├── lang/</span><br><span class="line">    │   ├── en_us.json</span><br><span class="line">    │   └── zh_cn.json</span><br><span class="line">    ├── models/</span><br><span class="line">    │   └── block/</span><br><span class="line">    │       └── &lt;block_id&gt;.json</span><br><span class="line">    ├── textures/</span><br><span class="line">    │   └── block/</span><br><span class="line">    │       └── &lt;block_id&gt;.png</span><br><span class="line">    └── blockstates/</span><br><span class="line">      └── &lt;block_id&gt;.json</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-语言文件lang"><a href="#2-2-语言文件lang" class="headerlink" title="2.2 语言文件lang"></a>2.2 语言文件lang</h3><p>注意在注册方块物品时在<code>new Item.Properties</code>后需要调用<code>useBlockDescriptionPrefix</code>，使得方块物品自动使用方块的翻译key。否则还需要再定义方块物品的翻译key</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;block.oceanic_arcana.test_block&quot;</span><span class="punctuation">:</span> <span class="string">&quot;测试方块&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-方块状态blockstates"><a href="#2-3-方块状态blockstates" class="headerlink" title="2.3 方块状态blockstates"></a>2.3 方块状态blockstates</h3><p>用于选择models，类似物品模型映射。一个最普通的blockstate文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;variants&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oceanic_arcana:block/test_block&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-方块模型和方块物品模型models"><a href="#2-4-方块模型和方块物品模型models" class="headerlink" title="2.4 方块模型和方块物品模型models"></a>2.4 方块模型和方块物品模型models</h3><p>方块模型用于渲染方块，内容描述了如何在方块不同的面渲染不同的材质。对于每一面都使用同一材质的方块，models文件如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;parent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;minecraft:block/cube_all&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;textures&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;all&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oceanic_arcana:block/test_block&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>千万不要忘记添加方块物品的models，这与普通物品的写法<em>可以</em>是<strong>不同的</strong>，直接继承方块的models即可:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;parent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;oceanic_arcana:block/test_block&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-材质文件textures"><a href="#2-5-材质文件textures" class="headerlink" title="2.5 材质文件textures"></a>2.5 材质文件textures</h3><p>格式与物品材质相同。如果方块每面材质不相同，则需要多个材质图片，并在方块模型文件中指定</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://alexioschiu.github.io/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/" data-id="cma18vl7d0000gcu4bkukc5o7" data-title="Minecraft NeoForge 注册方块" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Minecraft-NeoForge-注册物品-创造模式物品栏" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/" class="article-date">
@@ -138,7 +205,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://alexioschiu.github.io/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/" data-id="cm9zw5chl0001w0u47u6g9fzw" data-title="Minecraft NeoForge 注册物品&amp;创造模式物品栏" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="https://alexioschiu.github.io/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/" data-id="cma18vl7j0006gcu402da5i3m" data-title="Minecraft NeoForge 注册物品&amp;创造模式物品栏" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -206,7 +273,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://alexioschiu.github.io/2025/04/27/Minecraft-NeoForge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" data-id="cm9zw5chj0000w0u46r5m64py" data-title="Minecraft NeoForge 开发环境配置" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="https://alexioschiu.github.io/2025/04/27/Minecraft-NeoForge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" data-id="cma18vl7g0001gcu4c6bi7lpd" data-title="Minecraft NeoForge 开发环境配置" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -263,6 +330,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/">Minecraft NeoForge 注册方块</a>
+          </li>
         
           <li>
             <a href="/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/">Minecraft NeoForge 注册物品&amp;创造模式物品栏</a>
