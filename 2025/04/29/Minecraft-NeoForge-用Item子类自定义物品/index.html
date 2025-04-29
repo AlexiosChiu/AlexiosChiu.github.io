@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Minecraft NeoForge 用Item子类自定义物品 | AlexiosChiu&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="1. 创建Item子类可在src&#x2F;...&#x2F;&lt;mod_id&gt;&#x2F;item中创建一个类，继承原版的Item类。此时鼠标移到报错处，让IDEA创建与super匹配的构造函数。 1234567public class CoralDustItems extends Item &#123;    public CoralDustItems(Properties properties) &#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Minecraft NeoForge 用Item子类自定义物品">
+<meta property="og:url" content="https://alexioschiu.github.io/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/index.html">
+<meta property="og:site_name" content="AlexiosChiu&#39;s Blog">
+<meta property="og:description" content="1. 创建Item子类可在src&#x2F;...&#x2F;&lt;mod_id&gt;&#x2F;item中创建一个类，继承原版的Item类。此时鼠标移到报错处，让IDEA创建与super匹配的构造函数。 1234567public class CoralDustItems extends Item &#123;    public CoralDustItems(Properties properties) &#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-29T14:52:26.000Z">
+<meta property="article:modified_time" content="2025-04-29T15:47:49.671Z">
+<meta property="article:author" content="Alexios Chiu">
+<meta property="article:tag" content="Minecraft">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="AlexiosChiu's Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">AlexiosChiu&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://alexioschiu.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Minecraft-NeoForge-用Item子类自定义物品" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/" class="article-date">
+  <time class="dt-published" datetime="2025-04-29T14:52:26.000Z" itemprop="datePublished">2025-04-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Minecraft NeoForge 用Item子类自定义物品
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="1-创建Item子类"><a href="#1-创建Item子类" class="headerlink" title="1. 创建Item子类"></a>1. 创建Item子类</h2><p>可在<code>src/.../&lt;mod_id&gt;/item</code>中创建一个类，继承原版的<code>Item</code>类。此时鼠标移到报错处，让IDEA创建与super匹配的构造函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CoralDustItems</span> <span class="keyword">extends</span> <span class="title class_">Item</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CoralDustItems</span><span class="params">(Properties properties)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(properties);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-用该子类注册物品"><a href="#2-用该子类注册物品" class="headerlink" title="2. 用该子类注册物品"></a>2. 用该子类注册物品</h2><p>在注册物品时，使用对应的<code>new</code>方法，在此使用注册物品章节提到的捷径：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DeferredItem&lt;Item&gt; CORAL_DUST = ITEMS.registerItem(</span><br><span class="line">            <span class="string">&quot;coral_dust&quot;</span>,</span><br><span class="line">            CoralDustItems::<span class="keyword">new</span>, <span class="comment">// 注意此处</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Item</span>.Properties());</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-重写Item类的方法以实现自定义功能"><a href="#3-重写Item类的方法以实现自定义功能" class="headerlink" title="3. 重写Item类的方法以实现自定义功能"></a>3. 重写Item类的方法以实现自定义功能</h2><p><code>Item</code>类提供原版物品的各种交互逻辑，自定义物品只需重写即可实现自定义功能。常用的方法有：</p>
+<ul>
+<li><strong>use</strong> -&gt; <strong>InteractionResult</strong><ul>
+<li>右键使用物品时</li>
+</ul>
+</li>
+<li><strong>useOn</strong> -&gt; <strong>InteractionResult</strong><ul>
+<li>对方块右键使用物品时</li>
+</ul>
+</li>
+<li><strong>interactLivingEntity</strong> -&gt; <strong>InteractionResult</strong><ul>
+<li>对实体右键使用物品时</li>
+</ul>
+</li>
+<li><strong>mineBlock</strong> -&gt; <strong>boolean</strong><ul>
+<li>用物品挖掘方块时</li>
+</ul>
+</li>
+<li><strong>hurtEnemy</strong> -&gt; <strong>void</strong><ul>
+<li>用物品击打实体时</li>
+</ul>
+</li>
+</ul>
+<h3 id="InteractionResult"><a href="#InteractionResult" class="headerlink" title="InteractionResult"></a>InteractionResult</h3><p>根据返回<code>InteractionResult</code>的不同成员，客户端中将渲染不同的交互动作。其成员有：</p>
+<ul>
+<li><strong>SUCCESS</strong> ：在客户端做出右键使用的摆手动作</li>
+<li>SUCCESS_SERVER ：在服务端做出右键使用的摆手动作，但是做给谁看？？</li>
+<li><strong>CONSUME</strong> ：不是吃的意思，并不做出挥手动作，但是会返回<code>ItemContext</code>用于操作</li>
+<li>FAIL : 表示交互失败，或许能进一步操作</li>
+<li><strong>PASS</strong> ：空定义，常用作不满足使用条件时的返回值</li>
+<li>TRY_WITH_EMPTY_HAND ：空定义，有什么用？？</li>
+</ul>
+<p>下面是一个重写<code>useOn</code>的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> InteractionResult <span class="title function_">useOn</span><span class="params">(UseOnContext context)</span> &#123;</span><br><span class="line">       <span class="type">Level</span> <span class="variable">level</span> <span class="operator">=</span> context.getLevel();</span><br><span class="line">       <span class="keyword">if</span> (!level.isClientSide()) &#123;</span><br><span class="line">           <span class="type">BlockPos</span> <span class="variable">blockPos</span> <span class="operator">=</span> context.getClickedPos();</span><br><span class="line">           <span class="type">BlockState</span> <span class="variable">blockState</span> <span class="operator">=</span> level.getBlockState(blockPos);</span><br><span class="line">           <span class="keyword">if</span> (blockState.is(Blocks.SAND)) &#123;</span><br><span class="line">               level.destroyBlock(blockPos, <span class="literal">false</span>);</span><br><span class="line">               level.setBlockAndUpdate(blockPos, Blocks.COBBLESTONE.defaultBlockState());</span><br><span class="line">               <span class="keyword">return</span> InteractionResult.SUCCESS;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> InteractionResult.PASS;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-其它实现方法"><a href="#4-其它实现方法" class="headerlink" title="4. 其它实现方法"></a>4. 其它实现方法</h2><p>继承<code>Item</code>类并重写交互方法是实现逻辑的最佳实践。当然，也可以使用事件系统，监听交互行为，并判断玩家手中的物品类型，可这将带来持续性的性能开销，也会让模组变得臃肿，因此需要减少使用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://alexioschiu.github.io/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/" data-id="cma2op06q00004ou4dwqv1dmb" data-title="Minecraft NeoForge 用Item子类自定义物品" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Minecraft NeoForge 注册方块</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Minecraft/" style="font-size: 10px;">Minecraft</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/">Minecraft NeoForge 用Item子类自定义物品</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/">Minecraft NeoForge 注册方块</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/">Minecraft NeoForge 注册物品&amp;创造模式物品栏</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/27/Minecraft-NeoForge-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">Minecraft NeoForge 开发环境配置</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Alexios Chiu<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
