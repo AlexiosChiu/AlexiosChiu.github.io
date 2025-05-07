@@ -71,6 +71,82 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Minecraft-NeoForge-事件系统" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time class="dt-published" datetime="2025-05-07T05:16:40.000Z" itemprop="datePublished">2025-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Minecraft NeoForge 事件系统</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>使用NeoForge 21.5.42-beta，支持Minecraft 1.21.5<br>参考：<a target="_blank" rel="noopener" href="https://docs.neoforged.net/docs/concepts/events">NeoForge文档::Events</a></p>
+<h2 id="1-事件系统与事件总线"><a href="#1-事件系统与事件总线" class="headerlink" title="1. 事件系统与事件总线"></a>1. 事件系统与事件总线</h2><p>事件系统是NeoForge&#x2F;Forge的主要功能，用于捕获事件并执行自定义逻辑。事件是指游戏中发生的事件，如玩家跳跃、挖掘、登入登出、资源加载等等。<br>开发者可以注册(Subscribe)一个事件(Event)，甚至可以自定义新的事件。</p>
+<p>事件总线(Event Bus)是事件被处理的地方，在NeoForge中有两个事件总线：</p>
+<ul>
+<li>GAME总线(Forge中称为Forge总线)：生命周期为世界加载到世界关闭，是处理游戏中逻辑的最常用总线，即<code>NeoForge.EVENT_BUS</code></li>
+<li>MOD总线：生命周期为mod加载到游戏关闭， 常用于资源处理。该总线中的事件会并行执行</li>
+</ul>
+<h2 id="2-注册事件处理方法"><a href="#2-注册事件处理方法" class="headerlink" title="2. 注册事件处理方法"></a>2. 注册事件处理方法</h2><p>事件处理方法(Event Handler)都采用方法来实现，要求该方法：</p>
+<ol>
+<li><strong>只传入一个事件作为参数</strong></li>
+<li><strong>返回值为void</strong></li>
+</ol>
+<p>事件的注册有几种方法：</p>
+<ul>
+<li><p><code>IEventBus#addListener</code>：在Mod主类构造方法里调用对应总线的<code>addListener</code>方法，传入<code>类名::方法名</code></p>
+</li>
+<li><p><code>@SubscribeEvent</code>注解：在处理方法上加这一注解，然后在Mod主类构造方法调用<code>addListener</code>并传入对应类的实例(即<code>addListener(new 类名())</code>)，将自动注册所有注解了<code>@SubscribeEvent</code>的方法。如果方法都为静态方法，则可以传入类本身(即<code>addListener(类名.class)</code>)，自动注册所有静态方法</p>
+</li>
+<li><p><code>@EventBusSubscriber</code>注解：最佳实践。只需为类注解<code>@EventBusSubscriber</code>，NeoForge将自动找到该类，并将该类下所有注解了<code>@SubscribeEvent</code>的<strong>静态方法</strong>注册到事件总线中。因此，事件处理方法的要求可加上一条：需要是<strong>静态方法</strong>。该注解可以添加三个参数:modid、bus、value，分别传递模组ID、事件总线类型、注册环境</p>
+<ul>
+<li>modid：传入<code>MOD_ID</code>，便于debug时检查哪个mod的事件注册发生错误</li>
+<li>bus: 传入<code>EventBusSubscriber.Bus.GAME</code>或<code>EventBusSubscriber.Bus.MOD</code>以指定注册的总线</li>
+<li>value：传入<code>Dist.CLIENT</code>或<code>Dist.DEDICATED_SERVER</code>，指定注册的<strong>物理环境</strong>。必须注意，<code>Level#isClientSide()</code>检查的是<strong>逻辑环境</strong>。<br>比如，客户端启动单人游戏，是物理客户端上存在逻辑客户端和逻辑服务端；而服务端启动服务器，才存在物理服务端。</li>
+</ul>
+</li>
+</ul>
+<p>下面给出使用<code>@EventBusSubscriber</code>注册事件的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EventBusSubscriber(modid = &quot;yourmodid&quot;, bus = EventBusSubscriber.Bus.GAME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EventHandler</span> &#123;</span><br><span class="line">    <span class="meta">@SubscribeEvent</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">onLivingJump</span><span class="params">(LivingEvent.LivingJumpEvent event)</span> &#123;</span><br><span class="line">        <span class="type">LivingEntity</span> <span class="variable">entity</span> <span class="operator">=</span> event.getEntity();</span><br><span class="line">        <span class="keyword">if</span> (!entity.level().isClientSide()) &#123;</span><br><span class="line">            entity.heal(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-事件结构"><a href="#3-事件结构" class="headerlink" title="3. 事件结构"></a>3. 事件结构</h2><h3 id="3-1-字段与方法"><a href="#3-1-字段与方法" class="headerlink" title="3.1 字段与方法"></a>3.1 字段与方法</h3><p>事件的成员包括字段和方法，包含了事件的发起者、目标、环境，还有可以直接执行的操作等等，应根据不同事件的不同成员区别使用。</p>
+<h3 id="3-2-继承结构"><a href="#3-2-继承结构" class="headerlink" title="3.2 继承结构"></a>3.2 继承结构</h3><p>所有的事件都有公共父类<code>Event</code>，其下方又有许多子类。如以下继承链：<code>Event - EntityEvent - LivingEvent - PlayerEvent - PlayerTickEvent</code></p>
+<h3 id="3-3-优先级"><a href="#3-3-优先级" class="headerlink" title="3.3 优先级"></a>3.3 优先级</h3><p>NeoForge&#x2F;Forge用<code>EventPriority</code>枚举类为事件处理方法定义了五级优先级：<code>HIGHEST</code>,<code>HIGH</code>,<code>NORMAL</code>(默认值),<code>LOW</code>,<code>LOWEST</code>，可以在<code>@SubscribeEvent</code>注解或<code>IEventBus#addListener</code>中定义。<br>事件处理方法将按照优先级从高到低被执行。注意，对于并行处理的事件，优先级无效。</p>
+<h3 id="3-4-取消"><a href="#3-4-取消" class="headerlink" title="3.4 取消"></a>3.4 取消</h3><p>所有实现了<code>ICancellableEvent</code>接口的事件都可以被取消，拥有<code>#setCancel(boolean canceled)</code>和<code>#isCanceled()</code>方法。事件被取消后，其它事件处理方法不会被执行。<br>比如，取消玩家的<code>LivingDeathEvent</code>能防止玩家死亡(还需回复玩家血量，否则会由于血量为0卡在死亡界面)；取消生物的<code>LivingChangeTargetEvent</code>可以让该生物的目标实体保持不变。</p>
+<p>事件处理方法还可以只接受被取消了的事件。实现方法是在<code>@SubscribeEvent</code>注解或<code>#addListener</code>方法中设置<code>receiveCanceled</code>布尔值为真</p>
+<h3 id="3-5-三态与结果"><a href="#3-5-三态与结果" class="headerlink" title="3.5 三态与结果"></a>3.5 三态与结果</h3><p>尽管事件处理方法不能有返回值，但是有的事件本身具有不同的<code>TriState</code>或<code>Result</code>枚举类，可以通过某些<code>#set*</code>方法设置事件的结果或“返回值”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In some class where the listeners are subscribed to the game event bus</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@SubscribeEvent</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">renderNameTag</span><span class="params">(RenderNameTagEvent.CanRender event)</span> &#123;</span><br><span class="line">    <span class="comment">// Uses TriState to set the return state</span></span><br><span class="line">    event.setCanRender(TriState.FALSE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SubscribeEvent</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">mobDespawn</span><span class="params">(MobDespawnEvent event)</span> &#123;</span><br><span class="line">    <span class="comment">// Uses a Result enum to set the return state</span></span><br><span class="line">    event.setResult(MobDespawnEvent.Result.DENY);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://alexioschiu.github.io/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" data-id="cmadoqsad0000iwu42fa906uv" data-title="Minecraft NeoForge 事件系统" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Minecraft-NeoForge-用Item子类自定义物品" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/" class="article-date">
@@ -401,7 +477,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">五月 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a></li></ul>
     </div>
   </div>
 
@@ -412,6 +488,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Minecraft NeoForge 事件系统</a>
+          </li>
         
           <li>
             <a href="/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/">Minecraft NeoForge 用Item子类自定义物品</a>
