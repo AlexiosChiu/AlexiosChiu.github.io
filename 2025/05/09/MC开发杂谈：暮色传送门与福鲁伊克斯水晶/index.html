@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MC开发杂谈：暮色传送门与福鲁伊克斯水晶 | AlexiosChiu&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="从追踪一个ItemEntity说起12往被花围起的水坑里扔一颗钻石，激活一个暮色传送门；往水坑里扔入充能赛特斯石英、下界石英和红石粉，转化出两个福鲁伊克斯水晶  上面两个事件是暮色森林和应用能源2的核心，它们的共同点是：对于一个ItemEntity，检测它的所处环境是否符合条件，如果符合条件则触发某种逻辑。 对于一个模组的起始流程，这太酷了不是吗？我也想写一个，怎么实现呢？ 我的目标Feature">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MC开发杂谈：暮色传送门与福鲁伊克斯水晶">
+<meta property="og:url" content="https://alexioschiu.github.io/2025/05/09/MC%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88%EF%BC%9A%E6%9A%AE%E8%89%B2%E4%BC%A0%E9%80%81%E9%97%A8%E4%B8%8E%E7%A6%8F%E9%B2%81%E4%BC%8A%E5%85%8B%E6%96%AF%E6%B0%B4%E6%99%B6/index.html">
+<meta property="og:site_name" content="AlexiosChiu&#39;s Blog">
+<meta property="og:description" content="从追踪一个ItemEntity说起12往被花围起的水坑里扔一颗钻石，激活一个暮色传送门；往水坑里扔入充能赛特斯石英、下界石英和红石粉，转化出两个福鲁伊克斯水晶  上面两个事件是暮色森林和应用能源2的核心，它们的共同点是：对于一个ItemEntity，检测它的所处环境是否符合条件，如果符合条件则触发某种逻辑。 对于一个模组的起始流程，这太酷了不是吗？我也想写一个，怎么实现呢？ 我的目标Feature">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-09T06:43:46.000Z">
+<meta property="article:modified_time" content="2025-05-09T10:00:46.683Z">
+<meta property="article:author" content="Alexios Chiu">
+<meta property="article:tag" content="Minecraft">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="AlexiosChiu's Blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">AlexiosChiu&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://alexioschiu.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MC开发杂谈：暮色传送门与福鲁伊克斯水晶" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/05/09/MC%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88%EF%BC%9A%E6%9A%AE%E8%89%B2%E4%BC%A0%E9%80%81%E9%97%A8%E4%B8%8E%E7%A6%8F%E9%B2%81%E4%BC%8A%E5%85%8B%E6%96%AF%E6%B0%B4%E6%99%B6/" class="article-date">
+  <time class="dt-published" datetime="2025-05-09T06:43:46.000Z" itemprop="datePublished">2025-05-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MC开发杂谈：暮色传送门与福鲁伊克斯水晶
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="从追踪一个ItemEntity说起"><a href="#从追踪一个ItemEntity说起" class="headerlink" title="从追踪一个ItemEntity说起"></a>从追踪一个ItemEntity说起</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">往被花围起的水坑里扔一颗钻石，激活一个暮色传送门；</span><br><span class="line">往水坑里扔入充能赛特斯石英、下界石英和红石粉，转化出两个福鲁伊克斯水晶</span><br></pre></td></tr></table></figure>
+
+<p>上面两个事件是暮色森林和应用能源2的核心，它们的共同点是：对于一个<code>ItemEntity</code>，检测它的所处环境是否符合条件，如果符合条件则触发某种逻辑。</p>
+<p>对于一个模组的起始流程，这太酷了不是吗？我也想写一个，怎么实现呢？</p>
+<p>我的目标Feature：</p>
+<ul>
+<li>玩家扔一个自定义物品（暂时用铁锭代替）</li>
+<li>检测这个物品是不是在水里&amp;&amp;处于沙滩生物群系&amp;&amp;正在下雨</li>
+<li>如果满足条件，转化为另一物品（暂时是钻石），播放炫酷的音效等等…</li>
+</ul>
+<p>这引出了若干个问题：怎么追踪玩家抛出的物品？怎么判定物品实体所处的环境？<strong>怎么触发判断和转化逻辑？</strong></p>
+<p>没有头绪，翻翻源码吧</p>
+<h2 id="暮色的PlayerTickEvent：写的什么玩意？"><a href="#暮色的PlayerTickEvent：写的什么玩意？" class="headerlink" title="暮色的PlayerTickEvent：写的什么玩意？"></a>暮色的PlayerTickEvent：写的什么玩意？</h2><p>打开暮色的Github仓库，搜索<code>portal</code>之类的关键词，找到了一些关键文件：</p>
+<ul>
+<li><code>TFTickHandler.java</code></li>
+<li><code>TFItemTags.java</code></li>
+<li><code>TFPortalBlock.java</code></li>
+<li>…</li>
+</ul>
+<p>梳理一下实现逻辑：</p>
+<ol>
+<li><p><code>TFTickHandler</code>中，subscribe了<code>PlayerTickEvent.Post</code></p>
+</li>
+<li><p><strong>对于每个玩家</strong>，默认每20tick触发<code>checkForPortalCreation</code>方法（此前还要判断是否是<code>ServerPlayer</code>、是否有<code>portalCreationPermission</code>等等，此处略）</p>
+</li>
+<li><p><code>check*</code>方法中：</p>
+<ul>
+<li>获取玩家一定半径内的所有<code>ItemEntity</code>获得一个List；</li>
+<li>遍历List里所有物品，判断是否有<code>TFItemTags.PORTAL_ACTIVATOR</code>的标签；</li>
+<li>判断<code>canFormPortal</code>是否为真（物品实体所在位置是否满足传送门生成条件）；</li>
+<li>以上省略一些条件判断，终于生成了传送门</li>
+</ul>
+</li>
+</ol>
+<p>我的第一直觉：这个写法的性能影响真的呆胶布？？？</p>
+<p>首先，对于每个玩家都会subscribe<code>PlayerTickEvent</code>，也就是<strong>在线玩家越多，性能开支越大</strong></p>
+<p>其次，每秒遍历玩家一定半径中的<strong>所有掉落物</strong>，显然是不合理的。</p>
+<p>暮色传送门的开启，一个玩家或许只会进行一次。你是说，为了实现这仅此一次的逻辑，玩家需要背负这么大的持续性能开销？</p>
+<p>甚至在1.7.10版本的代码中，<code>TFTickHandler</code>的处理并没有优化PlayerTick事件的触发前提，没有判断<code>player.tickCount &amp; 20</code>，即，<strong>每一个PlayerTick</strong>，都在处理一大坨判定逻辑。</p>
+<p>这不幽默么？</p>
+<p>受不了了，试图优化</p>
+<h2 id="针对性地修改判定触发逻辑：我补药用TickEvent啊"><a href="#针对性地修改判定触发逻辑：我补药用TickEvent啊" class="headerlink" title="针对性地修改判定触发逻辑：我补药用TickEvent啊"></a>针对性地修改判定触发逻辑：我补药用TickEvent啊</h2><p>首先，谁会想用投掷器来开传送门？？为了只检测玩家扔出的物品，我直接先subscribe了<code>ItemTossEvent</code></p>
+<p>之后定义一个<code>Set</code>叫<code>trackedItems</code>，只要扔出的物品是铁锭，就把物品加入到集合中。这样就只有玩家被扔出的特定物品被追踪了，根本不用遍历玩家周围的所有物品。</p>
+<p>问题又来了：怎么触发检测逻辑？</p>
+<p>直接的想法是，预定一个延迟判断事件，比如在物品被扔出后的五秒后，进行判断，<strong>仅此一次</strong></p>
+<p>所以怎么写一个延迟任务？直接<code>Thread.sleep(100)</code>吗？千万不要！Minecraft中所有的游戏逻辑都在<code>Server Thread</code>这<strong>一个</strong>线程上执行。这个线程要是sleep了，那就真的去sleep吧</p>
+<p>Java原生还提供了<code>ScheduledExecutorService</code>、<code>TimerTask</code>、<code>CompletableFuture</code>等等。但是，它们都有各自的问题，最大的问题是：Minecraft中的时间是基于Tick的，与实际时间无关，在性能受限时可能会有游戏内外时间不同步的情况。另外，在MC开发中，是否应使用这种底层且侵入性强的方法，也值得商榷。我们在下一篇文章中再继续讨论。</p>
+<p>基于Minecraft的设计哲学，我们又回到了TickEvent。但这次我们使用的是<code>ServerTickEvent</code>，全局统一</p>
+<p>是的，在这我们也引入了持续开销。不过在讨论延迟任务的利害前，不妨先用最温和的方式实现这一功能吧qwq</p>
+<p>使用MC1.20.1的Forge实现的代码是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mod</span>.EventBusSubscriber(modid = Oceanic_Arcana.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Set&lt;ItemEntity&gt; trackedItems = Collections.newSetFromMap(<span class="keyword">new</span> <span class="title class_">WeakHashMap</span>&lt;&gt;());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SubscribeEvent</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">onItemToss</span><span class="params">(ItemTossEvent event)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!event.getPlayer().level().isClientSide()) &#123;</span><br><span class="line">            <span class="type">var</span> <span class="variable">player</span> <span class="operator">=</span> event.getPlayer();</span><br><span class="line">            <span class="type">var</span> <span class="variable">item</span> <span class="operator">=</span> event.getEntity();</span><br><span class="line">            player.sendSystemMessage(Component.literal(<span class="string">&quot;TOSS!&quot;</span>));</span><br><span class="line">            player.sendSystemMessage(item.getName());</span><br><span class="line">            <span class="keyword">if</span> (item.getItem().is(Items.IRON_INGOT)) &#123;</span><br><span class="line">                player.sendSystemMessage(Component.literal(<span class="string">&quot;Iron_Ingot!&quot;</span>));</span><br><span class="line">                trackedItems.add(item);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">tickCount</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="meta">@SubscribeEvent</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">doServerTick</span><span class="params">(TickEvent.ServerTickEvent event)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (event.phase != TickEvent.ServerTickEvent.Phase.END) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span> (++tickCount % <span class="number">20</span> != <span class="number">0</span> || trackedItems.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">        tickCount = <span class="number">0</span>;</span><br><span class="line">        Iterator&lt;ItemEntity&gt; iterator = trackedItems.iterator();</span><br><span class="line">        <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">            <span class="type">var</span> <span class="variable">item</span> <span class="operator">=</span> iterator.next();</span><br><span class="line">            <span class="keyword">if</span> (item.getItem().isEmpty() || item.isRemoved()) &#123;</span><br><span class="line">                iterator.remove();</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (item.isInWater()) &#123;</span><br><span class="line">                item.setItem(<span class="keyword">new</span> <span class="title class_">ItemStack</span>(Items.DIAMOND, item.getItem().getCount()));</span><br><span class="line">                item.level().playSound(<span class="literal">null</span>, item.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS);</span><br><span class="line">                iterator.remove();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Debug过程：<code>ConcurrentModificationException</code>：快速扔出多个铁锭时产生并发修改错误。把遍历<code>trackedItems</code>的方法从普通for改为iterator后解决</p>
+<h2 id="AE的Mixin：侵入但高效"><a href="#AE的Mixin：侵入但高效" class="headerlink" title="AE的Mixin：侵入但高效"></a>AE的Mixin：侵入但高效</h2><p>AE的代码抽象程度比较高，一开始有点难找到转换逻辑。搜索<code>Transform</code>关键词可以找到<code>TransformLogic</code>，其中定义了执行转换的方法。<br>而真正触发判定的是在<code>ItemEntityMixin</code>，其中用Mixin在原版的<code>ItemEntity</code>类里的<code>tick()</code>方法尾部注入了判定代码。<br>Mixin真是个好东西，但是也带来模组冲突的隐患。一般而言，Mixin这种屠龙刀应当是能不用就不用，尽量用侵入性低的事件系统来解决。<br>不过这段Mixin还是值得学习的，下面是源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inject(at = @At(&quot;RETURN&quot;), method = &quot;tick&quot;)</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">handleEntityTransform</span><span class="params">(CallbackInfo ci)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isRemoved()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">var</span> <span class="variable">self</span> <span class="operator">=</span> (ItemEntity) (Object) <span class="built_in">this</span>;</span><br><span class="line">        <span class="comment">// Just a hashmap lookup - short-circuit to not cause perf issues by iterating entities / recipes unnecessarily.</span></span><br><span class="line">        <span class="keyword">if</span> (!TransformLogic.canTransformInAnyFluid(self)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> Mth.floor(<span class="built_in">this</span>.getX());</span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> Mth.floor((<span class="built_in">this</span>.getBoundingBox().minY + <span class="built_in">this</span>.getBoundingBox().maxY) / <span class="number">2.0D</span>);</span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> Mth.floor(<span class="built_in">this</span>.getZ());</span><br><span class="line"></span><br><span class="line">        <span class="type">FluidState</span> <span class="variable">state</span> <span class="operator">=</span> <span class="built_in">this</span>.level().getFluidState(<span class="keyword">new</span> <span class="title class_">BlockPos</span>(j, i, k));</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">isValidFluid</span> <span class="operator">=</span> !state.isEmpty() &amp;&amp; TransformLogic.canTransformInFluid(self, state);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (level().isClientSide()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (isValidFluid &amp;&amp; <span class="built_in">this</span>.ae2_delay++ &gt; <span class="number">30</span> &amp;&amp; AEConfig.instance().isEnableEffects()) &#123;</span><br><span class="line">                <span class="comment">// Client side we only render some cool animations.</span></span><br><span class="line">                AppEng.instance().spawnEffect(EffectType.Lightning, <span class="built_in">this</span>.level(), <span class="built_in">this</span>.getX(), <span class="built_in">this</span>.getY(), <span class="built_in">this</span>.getZ(),</span><br><span class="line">                        <span class="literal">null</span>);</span><br><span class="line">                <span class="built_in">this</span>.ae2_delay = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (isValidFluid) &#123;</span><br><span class="line">                <span class="built_in">this</span>.ae2_transformTime++;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">this</span>.ae2_transformTime &gt; <span class="number">60</span> &amp;&amp; !TransformLogic.tryTransform(self, c -&gt; c.isFluid(state))) &#123;</span><br><span class="line">                    <span class="built_in">this</span>.ae2_transformTime = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.ae2_transformTime = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>学习亮点：</p>
+<ul>
+<li>注入位置为<code>RETURN</code>，即方法返回前，这使得原版的更新逻辑先被执行，可减少冲突。相对应的，爆炸的转换逻辑则注入到<code>hurt</code>方法的<code>HEAD</code>，即方法头部，保证物品能被正确转换而不是被销毁。</li>
+<li>客户端的渲染和服务端的逻辑分离</li>
+<li><code>transformTime</code>实现转换所需时间</li>
+</ul>
+<p>疑问：没有进行分频优化，使得每tick都执行判定？直接对<code>tickCount</code>取模，应该能优化。</p>
+<p>写了这么多，还是对延时任务心心念念。如果是触发频次很少很少的任务，用TickEvent这种增加持续性开销的写法肯定是不合理的！下一篇文章，讨论一下延时任务的使用。</p>
+<p>立个flag，有空了去给暮色修改一下传送门创建逻辑XD</p>
+<p>参考：<br><a target="_blank" rel="noopener" href="https://github.com/TeamTwilight/twilightforest/blob/1.21.x/src/main/java/twilightforest/events/TFTickHandler.java">暮色森林-TFTickHandler</a><br><a target="_blank" rel="noopener" href="https://github.com/AppliedEnergistics/Applied-Energistics-2/blob/85e3ef41cd69e663157af66637ebc120fc9da961/src/main/java/appeng/mixins/ItemEntityMixin.java">AE2-ItemEntityMixin</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://alexioschiu.github.io/2025/05/09/MC%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88%EF%BC%9A%E6%9A%AE%E8%89%B2%E4%BC%A0%E9%80%81%E9%97%A8%E4%B8%8E%E7%A6%8F%E9%B2%81%E4%BC%8A%E5%85%8B%E6%96%AF%E6%B0%B4%E6%99%B6/" data-id="cmagmmadq0000ucu42gnh3epx" data-title="MC开发杂谈：暮色传送门与福鲁伊克斯水晶" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Minecraft NeoForge 事件系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Minecraft/" rel="tag">Minecraft</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Minecraft/" style="font-size: 10px;">Minecraft</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">五月 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/05/09/MC%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88%EF%BC%9A%E6%9A%AE%E8%89%B2%E4%BC%A0%E9%80%81%E9%97%A8%E4%B8%8E%E7%A6%8F%E9%B2%81%E4%BC%8A%E5%85%8B%E6%96%AF%E6%B0%B4%E6%99%B6/">MC开发杂谈：暮色传送门与福鲁伊克斯水晶</a>
+          </li>
+        
+          <li>
+            <a href="/2025/05/07/Minecraft-NeoForge-%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/">Minecraft NeoForge 事件系统</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/29/Minecraft-NeoForge-%E7%94%A8Item%E5%AD%90%E7%B1%BB%E8%87%AA%E5%AE%9A%E4%B9%89%E7%89%A9%E5%93%81/">Minecraft NeoForge 用Item子类自定义物品</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/28/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E6%96%B9%E5%9D%97/">Minecraft NeoForge 注册方块</a>
+          </li>
+        
+          <li>
+            <a href="/2025/04/27/Minecraft-NeoForge-%E6%B3%A8%E5%86%8C%E7%89%A9%E5%93%81-%E5%88%9B%E9%80%A0%E6%A8%A1%E5%BC%8F%E7%89%A9%E5%93%81%E6%A0%8F/">Minecraft NeoForge 注册物品&amp;创造模式物品栏</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Alexios Chiu<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
