@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -166,6 +166,130 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://alexioschiu.github.io/2025/06/04/Minecraft-NeoForge-Mixin%E5%85%A5%E9%97%A8%E4%B8%8EInject/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alexios Chiu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlexiosChiu's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | AlexiosChiu's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/06/04/Minecraft-NeoForge-Mixin%E5%85%A5%E9%97%A8%E4%B8%8EInject/" class="post-title-link" itemprop="url">Minecraft NeoForge Mixin入门与@Inject</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-04 01:00:37 / 修改时间：15:34:54" itemprop="dateCreated datePublished" datetime="2025-06-04T01:00:37+08:00">2025-06-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>使用Minecraft 1.21.1 &amp;&amp; NeoForge 21.1.172</p>
+<h2 id="0-什么是Mixin"><a href="#0-什么是Mixin" class="headerlink" title="0. 什么是Mixin"></a>0. 什么是Mixin</h2><p>Mixin是一种直接修改Minecraft源码的工具，常用于处理事件系统无法完成的逻辑。</p>
+<h2 id="1-Mixin的导入"><a href="#1-Mixin的导入" class="headerlink" title="1. Mixin的导入"></a>1. Mixin的导入</h2><p>NeoForge现已默认支持Mixin，只需要在<code>resources</code>下的<code>neoforge.mods.toml</code>中开启即可。找到以下几行：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.</span></span><br><span class="line"><span class="comment"># [[mixins]]</span></span><br><span class="line"><span class="comment"># config=&quot;$&#123;mod_id&#125;.mixins.json&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>将后面两行的注释取消即可开始使用Mixin。</p>
+<p>接下来，在<code>resources</code>文件夹下创建一个<code>&#123;mod_id&#125;.mixins.json</code>文件，作为Mixin配置文件，内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="string">&quot;net.alexioschiu.oceanic_arcana.mixin&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mixins&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;BubbleColumnBlockMixin&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;client&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;compatibilityLevel&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JAVA_21&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;injectors&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;defaultRequire&quot;</span><span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>package</code>指示所有Mixin类需要放置在内的文件夹，<code>mixins</code>、<code>client</code>和<code>server</code>中填写Mixin类的名字，三者分别表示同时在客户端和服务端加载的、只在客户端加载的和只在服务端加载的Mixin类。<strong>注意：这里指的是物理端，非逻辑端</strong>。</p>
+<p>建议下载IntelliJ IDEA插件<code>Minecraft Development</code>，方便进行Mixin的编写。</p>
+<h2 id="2-Mixin类的编写"><a href="#2-Mixin类的编写" class="headerlink" title="2. Mixin类的编写"></a>2. Mixin类的编写</h2><p>在配置文件指定的位置创建存放Mixin类的文件夹，新建一个类，命名建议使用原版类名+Mixin的格式，如<code>ItemEntityMixin</code>。</p>
+<p>创建时，需要在类定义前加上<code>@Mixin</code>注解，且保证继承和接口实现与原类相同，实现匹配super的构造函数。下面是一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mixin(BubbleColumnBlock.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">BubbleColumnBlockMixin</span> <span class="keyword">extends</span> <span class="title class_">Block</span> <span class="keyword">implements</span> <span class="title class_">BucketPickup</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BubbleColumnBlockMixin</span><span class="params">(Properties properties)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(properties);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有把该Mixin类加入到配置文件中，将光标移到类名上，可通过<code>Minecraft Development</code>插件自动添加该类到配置文件中（添加到客户端和服务端都加载的列表中）。</p>
+<h2 id="3-Inject"><a href="#3-Inject" class="headerlink" title="3. @Inject"></a>3. @Inject</h2><p><code>@Inject</code>是最常用的Mixin注解，用于向指定方法中插入自定义代码。该注解的两个常用参数为<code>method</code>和<code>at</code>：</p>
+<ul>
+<li><code>method</code>：注入的目标方法名。</li>
+<li><code>at</code>：注入的位置，格式为<code>@At(...)</code>，有以下几种注入位置可选：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">标识</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">INVOKE</td>
+<td align="center">方法调用时</td>
+</tr>
+<tr>
+<td align="center">HEAD</td>
+<td align="center">方法头部</td>
+</tr>
+<tr>
+<td align="center">RETURN</td>
+<td align="center">方法返回前（<strong>每个</strong>return前）</td>
+</tr>
+<tr>
+<td align="center">TAIL</td>
+<td align="center">方法尾部（<strong>最末</strong>return前）</td>
+</tr>
+</tbody></table>
+<p>下面用一个例子进行说明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inject(method = &quot;entityInside&quot;, at = @At(&quot;RETURN&quot;))</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleItem</span><span class="params">(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo ci)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (entity <span class="keyword">instanceof</span> ItemEntity itemEntity) &#123;</span><br><span class="line">            <span class="keyword">if</span> (itemEntity.getOwner() <span class="keyword">instanceof</span> Player player) &#123;</span><br><span class="line">                player.sendSystemMessage(Component.literal(itemEntity.toString()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>public</code>：访问修饰符无严格要求，一般与原方法相同。</li>
+<li><code>void</code>：返回类型硬性要求填<code>void</code>，因为这个注入方法不会被获取返回值。</li>
+<li><code>handleItem</code>：注入方法的方法名可以任选，无影响。</li>
+<li><code>CallbackInfo</code>：方法返回参数，必填，可用于终端原方法或修改返回逻辑。</li>
+</ul>
+<p>注意方法参数声明需要和原方法的顺序、类型完全一致，最后才加上<code>CallbackInfo</code>，这样后可以直接在注入方法中使用原方法的形参。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
